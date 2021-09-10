@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
             if (_jumping==true)
             {
                 _jumping = false;
+                _anim.SetBool("IdleJumping", _jumping);
                 _anim.SetBool("Jumping", _jumping);
             }
 
@@ -56,7 +57,12 @@ public class Player : MonoBehaviour
                 _yVelocity = _jumpHeight;
                 _jumping = true;
                 _anim.SetBool("Jumping",_jumping);
-            }           
+            }     
+            if (Input.GetKeyDown(KeyCode.Space)&&_anim.GetFloat("Speed")<0.1f)
+            {
+                _yVelocity = _jumpHeight;
+                _anim.SetBool("IdleJumping", _jumping);
+            }
         }
         else
         {
