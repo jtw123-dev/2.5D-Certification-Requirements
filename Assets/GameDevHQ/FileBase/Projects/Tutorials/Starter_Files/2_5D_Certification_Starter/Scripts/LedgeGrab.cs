@@ -21,7 +21,8 @@ public class LedgeGrab : MonoBehaviour
             _animator.SetFloat("Speed", 0);
             _animator.SetBool("Jumping", false);
             other.GetComponentInParent<CharacterController>().enabled = false;
-            _player.transform.position = _ledgeTransform.position;                  
+            _player.transform.position = _ledgeTransform.position;           
+            
         }
     }
 }
