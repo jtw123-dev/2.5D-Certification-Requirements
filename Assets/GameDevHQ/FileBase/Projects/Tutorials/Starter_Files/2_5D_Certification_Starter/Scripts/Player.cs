@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _ledge;
     private Vector3 _upwardCheck;
     public bool _hitObject;
+    private int _score;
  
     // Start is called before the first frame update
     void Start()
@@ -98,7 +99,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _yVelocity -= _gravity;                             
+            _yVelocity -= _gravity ;                             
         }
         _velocity.y = _yVelocity;   
         _controller.Move(_velocity * Time.deltaTime);
@@ -126,6 +127,12 @@ public class Player : MonoBehaviour
             _controller.center = new Vector3(0, 0.87f, 0);
         }
            
+    }
+
+    public void Score()
+    {
+        _score++;
+        UIManager._Instance.ScoreUpdate(_score);
     }
     private void FixedUpdate()
     {
