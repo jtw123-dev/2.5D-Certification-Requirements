@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField]private float _speed = 5;
     private Vector3 _direction;
+    private Vector3 _directionUp;
     [SerializeField]private float _gravity;
     [SerializeField] private float _jumpHeight;
     private CharacterController _controller;
@@ -20,7 +21,9 @@ public class Player : MonoBehaviour
     private Vector3 _upwardCheck;
     public bool _hitObject;
     private int _score;
- 
+    public bool _ladder;
+    private float _verticalInput;
+  
     // Start is called before the first frame update
     void Start()
     {
@@ -32,19 +35,21 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        Debug.Log(_controller.isGrounded);
         if (Input.GetKeyDown(KeyCode.E)&& _anim.GetBool("LedgeGrab")==true)
         {
             _anim.SetBool("ClimbUp",true);                  
         }
         float _horizontalInput = Input.GetAxisRaw("Horizontal");
 
+        
         if (_controller.isGrounded==true)
-        {                      
+        {
+            
             _direction = new Vector3(0, 0, _horizontalInput);
             _velocity = _direction * _speed;                                                      
             _anim.SetFloat("Speed",Mathf.Abs( _horizontalInput));
-
+         
             if (_horizontalInput!=0)
             {
                 Vector3 facing = transform.localEulerAngles;
@@ -96,13 +101,34 @@ public class Player : MonoBehaviour
                     _velocity.z -= _rollDistance;
                 }
             }
+
+            if (_ladder == true)
+            {
+                float _verticalInput = Input.GetAxisRaw("Vertical");
+                _yVelocity = _verticalInput;
+                _directionUp = new Vector3(0, _verticalInput, _horizontalInput);
+                Vector3  _velocityUp = _directionUp * _speed;
+                _controller.Move(_velocityUp * Time.deltaTime);
+                _anim.SetFloat("Speed", Mathf.Abs(_verticalInput));
+            }
         }
         else
         {
+           if (_ladder==true)
+            {
+                float _verticalInput = Input.GetAxisRaw("Vertical");
+                _yVelocity = _verticalInput;
+                _directionUp = new Vector3(0, _verticalInput, _horizontalInput);
+                Vector3 _velocityUp = _directionUp * _speed;
+                _controller.Move(_velocityUp * Time.deltaTime);
+                _anim.SetFloat("Speed", Mathf.Abs(_verticalInput));
+            }
             _yVelocity -= _gravity ;                             
         }
         _velocity.y = _yVelocity;   
         _controller.Move(_velocity * Time.deltaTime);
+
+        
     }
     
     public void DoneClimbing()
@@ -136,6 +162,13 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        //Ray rayLadder = new Ray(transform.position, transform.right);
+
+       // if (Physics.Raycast(rayLadder,1)&&_ladder==true)
+       // {
+        //    Debug.Log(_controller.isGrounded);
+       // }
+
         Ray ray = new Ray(transform.position, transform.up);
 
         if (Physics.Raycast(ray, 6 )&&_roll==true)
@@ -148,5 +181,21 @@ public class Player : MonoBehaviour
         {
             _hitObject = false;
         }
+    }
+    public void ClimbUpLadder()
+    {      
+        if (_flip ==false)
+        {
+            _ladder = true;
+            _jumping = false;
+            _anim.SetBool("ClimbLadder", true);
+        }
+        
+    }
+    public void StopClimbingLadder()
+    {
+        _ladder = false;
+        _jumping = true;
+        _anim.SetBool("ClimbLadder", false);
     }
 }
