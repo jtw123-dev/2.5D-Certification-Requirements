@@ -18,6 +18,11 @@ public class MoveablePlatform : MonoBehaviour
         {
             _switch = false;
         }
+        if (other.tag=="Player")
+        {
+            Debug.Log("moving platform");
+            other.transform.parent = gameObject.transform.parent;
+        }
     }
     private void Update()
     {

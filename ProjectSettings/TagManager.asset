@@ -8,6 +8,8 @@ TagManager:
   - cube
   - PointA
   - PointB
+  - Level1
+  - Level2
   layers:
   - Default
   - TransparentFX
