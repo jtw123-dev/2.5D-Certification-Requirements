@@ -23,9 +23,9 @@ public class Ladder : MonoBehaviour
     {
         if (other.tag=="Player")
         {
-            Vector3 ladderClamp = _player.transform.position;
-            ladderClamp.y = Mathf.Clamp(ladderClamp.y, 69.05f, 84.73f);
-            _player.transform.position = ladderClamp;
+           // Vector3 ladderClamp = _player.transform.position;
+           // ladderClamp.y = Mathf.Clamp(ladderClamp.y, 69.05f, 84.73f);
+            //_player.transform.position = ladderClamp;
 
             _player.ClimbUpLadder();
         }

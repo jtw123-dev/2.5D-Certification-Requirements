@@ -8,6 +8,7 @@ public class LedgeGrab : MonoBehaviour
     private Player _player;
     [SerializeField] Transform _ledgeTransform;
     [SerializeField] Vector3 standPos;
+    public Transform _finalPos;
     private void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -21,8 +22,7 @@ public class LedgeGrab : MonoBehaviour
             _animator.SetFloat("Speed", 0);
             _animator.SetBool("Jumping", false);
             other.GetComponentInParent<CharacterController>().enabled = false;
-            _player.transform.position = _ledgeTransform.position;           
-            
+            _player.transform.position = _ledgeTransform.position;                    
         }
     }
 }

@@ -23,13 +23,16 @@ public class Player : MonoBehaviour
     private int _score;
     public bool _ladder;
     private float _verticalInput;
+    private LedgeGrab _grab;
   
     // Start is called before the first frame update
     void Start()
     {
+        
         _upwardCheck = transform.TransformDirection(Vector3.up);
         _controller = GetComponent<CharacterController>();
         _anim = GetComponentInChildren<Animator>();
+        _grab = GameObject.Find("Ledge_Checker").GetComponent<LedgeGrab>();
     }
 
     // Update is called once per frame
@@ -41,11 +44,9 @@ public class Player : MonoBehaviour
             _anim.SetBool("ClimbUp",true);                  
         }
         float _horizontalInput = Input.GetAxisRaw("Horizontal");
-
-        
+      
         if (_controller.isGrounded==true)
-        {
-            
+        {        
             _direction = new Vector3(0, 0, _horizontalInput);
             _velocity = _direction * _speed;                                                      
             _anim.SetFloat("Speed",Mathf.Abs( _horizontalInput));
@@ -126,14 +127,12 @@ public class Player : MonoBehaviour
             _yVelocity -= _gravity ;                             
         }
         _velocity.y = _yVelocity;   
-        _controller.Move(_velocity * Time.deltaTime);
-
-        
+        _controller.Move(_velocity * Time.deltaTime);        
     }
     
     public void DoneClimbing()
     {
-        transform.position = new Vector3 (0.39f,74.36f,125.13f);
+        transform.position = _grab._finalPos.position;
         _anim.SetBool("LedgeGrab", false);
          _controller.enabled = true;
         _anim.SetBool("ClimbUp", false);
@@ -189,8 +188,7 @@ public class Player : MonoBehaviour
             _ladder = true;
             _jumping = false;
             _anim.SetBool("ClimbLadder", true);
-        }
-        
+        }      
     }
     public void StopClimbingLadder()
     {
